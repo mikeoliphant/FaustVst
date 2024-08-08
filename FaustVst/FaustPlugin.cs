@@ -11,6 +11,8 @@ namespace FaustVst
 {
     public class FaustPlugin : AudioPluginBase
     {
+        public string PluginFilePath;
+
         AudioIOPort monoInput;
         AudioIOPort monoOutput;
 
@@ -49,6 +51,8 @@ namespace FaustVst
 
         public void LoadPlugin(string path)
         {
+            PluginFilePath = path;
+
             FaustParameters.Clear();
 
             Logger.Log("Compiling plugin");

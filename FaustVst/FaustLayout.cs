@@ -12,8 +12,6 @@ namespace FaustVst
         Dock mainDock;
         HorizontalStack paramStack;
         TextBlock pluginFileText;
-        string pluginFilePath;
-
 
         public FaustLayout(FaustPlugin plugin)
         {
@@ -67,8 +65,9 @@ namespace FaustVst
 
             mainDock.Children.Add(pluginLoadStack);
 
-            pluginFileText = new TextBlock("No Plugin Loaded")
+            pluginFileText = new TextBlock()
             {
+                Margin = new LayoutPadding(10),
                 VerticalAlignment = EVerticalAlignment.Center
             };
 
@@ -94,12 +93,14 @@ namespace FaustVst
 
             mainDock.Children.Add(paramStack);
 
+            UpdateParameters();
+
             mainDock.UpdateContentLayout();
         }
 
         void UpdateParameters()
         {
-            pluginFileText.Text = Path.GetFileName(pluginFilePath);
+            pluginFileText.Text = String.IsNullOrEmpty(plugin.PluginFilePath) ? "No Plugin Loaded" : Path.GetFileName(plugin.PluginFilePath);
 
             paramStack.Children.Clear();
 
@@ -179,9 +180,9 @@ namespace FaustVst
 
         void ReloadPlugin()
         {
-            if (!string.IsNullOrEmpty(pluginFilePath))
+            if (!string.IsNullOrEmpty(plugin.PluginFilePath))
             {
-                plugin.LoadPlugin(pluginFilePath);
+                plugin.LoadPlugin(plugin.PluginFilePath);
 
                 UpdateParameters();
             }
@@ -197,9 +198,7 @@ namespace FaustVst
             {
                 if (!string.IsNullOrEmpty(openFileDialog.FileName))
                 {
-                    pluginFilePath = openFileDialog.FileName;
-
-                    plugin.LoadPlugin(pluginFilePath);
+                    plugin.LoadPlugin(openFileDialog.FileName);
 
                     UpdateParameters();
                 }
