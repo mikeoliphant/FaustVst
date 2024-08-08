@@ -19,6 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Dependencies\UILayout\UILayout.MonoGame.WindowsDX\UILayout.MonoGame.WindowsDX.csproj" />
 		<ProjectReference Include="..\FaustDSP\FaustDSP.csproj" />
 	</ItemGroup>
 

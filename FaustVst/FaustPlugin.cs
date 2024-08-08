@@ -24,7 +24,7 @@ namespace FaustVst
         public FaustPlugin()
 		{
 			Company = "Nostatic Software";
-			Website = "www.nostaticsoftware.com";
+			Website = "github.com/mikeoliphant";
 			Contact = "contact@nostatic.org";
 			PluginName = "FaustPlugin";
 			PluginCategory = "Fx";

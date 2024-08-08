@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Dependencies\UILayout\ImageSheetProcessor\ImageSheetProcessor.csproj" />
+  </ItemGroup>
+
 </Project>
