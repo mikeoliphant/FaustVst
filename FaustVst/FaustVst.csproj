@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AudioPlugSharp" Version="0.6.3" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" />
+		<PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
+		<PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.303" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FaustDSP\FaustDSP.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Content\Textures\" />
+	</ItemGroup>
+
+</Project>
