@@ -49,10 +49,6 @@ namespace FaustVst
 
         public void LoadPlugin(string path)
         {
-            if (faustPlugin == null)
-            {
-            }
-
             FaustParameters.Clear();
 
             Logger.Log("Compiling plugin");
@@ -116,7 +112,11 @@ namespace FaustVst
             }
             else
             {
-                new Thread(new ThreadStart(RunGame)).Start();
+                Thread thread = new Thread(new ThreadStart(RunGame));
+
+                thread.SetApartmentState(ApartmentState.STA);
+
+                thread.Start();
             }
         }
 

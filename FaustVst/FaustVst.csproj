@@ -5,6 +5,7 @@
 		<UseWindowsForms>true</UseWindowsForms>
 		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 
 	<ItemGroup>
