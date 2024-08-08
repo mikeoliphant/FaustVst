@@ -12,6 +12,7 @@ namespace FaustVst
         Dock mainDock;
         HorizontalStack paramStack;
         TextBlock pluginFileText;
+        UIColor foregroundColor = UIColor.Black;
 
         public FaustLayout(FaustPlugin plugin)
         {
@@ -94,8 +95,6 @@ namespace FaustVst
             mainDock.Children.Add(paramStack);
 
             UpdateParameters();
-
-            mainDock.UpdateContentLayout();
         }
 
         void UpdateParameters()
@@ -104,13 +103,71 @@ namespace FaustVst
 
             paramStack.Children.Clear();
 
-            foreach (FaustUIElement element in plugin.FaustParameters)
+            if (plugin.FaustDSP != null)
+                AddParameters(plugin.FaustDSP.UIDefinition.RootElement, paramStack);
+
+            mainDock.UpdateContentLayout();
+        }
+
+        void AddParameters(FaustUIElement element, ListUIElement container)
+        {
+            if (element is FaustBoxElement)
             {
-                if (element is FaustUIWriteableFloatElement)
+                NinePatchWrapper outline = new NinePatchWrapper(Layout.Current.DefaultUnpressedNinePatch)
+                {
+                    Margin = new LayoutPadding(20)
+                };
+                container.Children.Add(outline);
+
+                VerticalStack verticalStack = new VerticalStack();
+                outline.Child = verticalStack;
+
+                verticalStack.Children.Add(new TextBlock(element.Label));
+
+                HorizontalStack hStack = new HorizontalStack();
+                verticalStack.Children.Add(hStack);
+
+                foreach (FaustUIElement child in (element as FaustBoxElement).Children)
+                {
+                    AddParameters(child, hStack);
+                }
+            }
+            else
+            {
+                if ((element is FaustUIFloatElement) && ((element.ElementType == EFaustUIElementType.HorizontalBargraph) || (element.ElementType == EFaustUIElementType.VerticalBargraph)))
+                {
+                    VerticalStack controlVStack = new VerticalStack()
+                    {
+                        HorizontalAlignment = EHorizontalAlignment.Stretch,
+                        VerticalAlignment = EVerticalAlignment.Stretch
+                    };
+
+                    controlVStack.Children.Add(new TextBlock(element.Label)
+                    {
+                        HorizontalAlignment = EHorizontalAlignment.Center,
+                        TextColor = foregroundColor,
+                        TextFont = Layout.Current.GetFont("SmallFont")
+                    });
+
+                    AudioLevelDisplay levelDisplay = new AudioLevelDisplay()
+                    {
+                        DesiredHeight = 300,
+                        DesiredWidth = 40,
+                        VerticalAlignment = EVerticalAlignment.Center,
+                        Margin = new LayoutPadding(20, 0),
+                        GetValue = delegate
+                        {
+                            return (element as FaustUIFloatElement).VariableAccessor.GetValue();
+                        }
+                    };
+
+                    controlVStack.Children.Add(levelDisplay);
+
+                    paramStack.Children.Add(controlVStack);
+                }
+                else if (element is FaustUIWriteableFloatElement)
                 {
                     FaustUIWriteableFloatElement floatElement = element as FaustUIWriteableFloatElement;
-
-                    UIColor foregroundColor = UIColor.Black;
 
                     VerticalStack controlVStack = new VerticalStack()
                     {
@@ -171,11 +228,9 @@ namespace FaustVst
 
                     controlDock.Children.Add(valueDisplay);
 
-                    paramStack.Children.Add(controlVStack);
+                    container.Children.Add(controlVStack);
                 }
             }
-
-            mainDock.UpdateContentLayout();
         }
 
         void ReloadPlugin()

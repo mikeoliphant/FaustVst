@@ -16,8 +16,7 @@ namespace FaustVst
         AudioIOPort monoInput;
         AudioIOPort monoOutput;
 
-        IFaustDSP faustPlugin = null;
-        public List<FaustUIElement> FaustParameters = new List<FaustUIElement>();
+        public IFaustDSP FaustDSP { get; private set; } = null;
         double[][] buf = new double[1][];
 
         MonoGameHost GameHost;
@@ -53,8 +52,6 @@ namespace FaustVst
         {
             PluginFilePath = path;
 
-            FaustParameters.Clear();
-
             Logger.Log("Compiling plugin");
 
             Assembly faustAssembly = typeof(IFaustDSP).Assembly;
@@ -67,38 +64,21 @@ namespace FaustVst
 
                 Logger.Log("LoadContext: " + loadContext.ToString());
 
-                faustPlugin = compiler.CompileDSP(path, loadContext);
+                FaustDSP = compiler.CompileDSP(path, loadContext);
             }
             catch (Exception ex)
             {
                 Logger.Log("Compilation failed with: " + ex.ToString());
             }
 
-            if (faustPlugin != null)
+            if (FaustDSP != null)
             {
-                AddParameters(faustPlugin.UIDefinition.RootElement);
+                FaustDSP.InstanceResetUserInterface();
+                FaustDSP.Init((int)Host.SampleRate);
             }
             else
             {
                 Logger.Log("*** Plugin is null");
-            }
-        }
-
-        void AddParameters(FaustUIElement element)
-        {
-            if (element is FaustBoxElement)
-            {
-                foreach (FaustUIElement child in (element as FaustBoxElement).Children)
-                {
-                    AddParameters(child);
-                }
-            }
-            else
-            {
-                if (element is FaustUIWriteableFloatElement)
-                {
-                    FaustParameters.Add(element);
-                }
             }
         }
 
@@ -174,9 +154,9 @@ namespace FaustVst
         {
             base.InitializeProcessing();
 
-            if (faustPlugin != null)
+            if (FaustDSP != null)
             {
-                faustPlugin.Init((int)Host.SampleRate);
+                FaustDSP.Init((int)Host.SampleRate);
             }
         }
 
@@ -193,7 +173,7 @@ namespace FaustVst
 
             Host.ProcessAllEvents();
 
-            if (faustPlugin == null)
+            if (FaustDSP == null)
             {
                 monoInput.PassThroughTo(monoOutput);
             }
@@ -201,7 +181,7 @@ namespace FaustVst
             {
                 monoInput.GetAudioBuffer(0).CopyTo(buf[0]);
 
-                faustPlugin.Compute((int)Host.CurrentAudioBufferSize, buf, buf);
+                FaustDSP.Compute((int)Host.CurrentAudioBufferSize, buf, buf);
 
                 Span<double> outSpan = buf[0];
 
