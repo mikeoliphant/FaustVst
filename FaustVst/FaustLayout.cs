@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FaustDSP;
+using Microsoft.Xna.Framework;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -237,9 +238,7 @@ namespace FaustVst
         {
             if (!string.IsNullOrEmpty(plugin.PluginFilePath))
             {
-                plugin.LoadPlugin(plugin.PluginFilePath);
-
-                UpdateParameters();
+                LoadPlugin(plugin.PluginFilePath);
             }
         }
 
@@ -253,11 +252,30 @@ namespace FaustVst
             {
                 if (!string.IsNullOrEmpty(openFileDialog.FileName))
                 {
-                    plugin.LoadPlugin(openFileDialog.FileName);
-
-                    UpdateParameters();
+                    LoadPlugin(openFileDialog.FileName);
                 }
             }
+        }
+
+        void LoadPlugin(string pluginFilePath)
+        {
+            try
+            {
+                plugin.LoadPlugin(pluginFilePath);
+            }
+            catch (Exception ex)
+            {
+                if (ex is DspCompiler.FaustCompileException)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                else
+                {
+                    MessageBox.Show("An error occurred: " + ex.ToString());
+                }
+            }
+
+            UpdateParameters();
         }
     }
 }

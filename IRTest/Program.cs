@@ -20,7 +20,7 @@ namespace IRTest
             string dspPath = Path.Combine(testPath, "dsp");
             string irPath = Path.Combine(testPath, "reference");
 
-            DSPCompiler compiler = new DSPCompiler();
+            DspCompiler compiler = new DspCompiler();
 
             int numSucceeded = 0;
             int numFailed = 0;

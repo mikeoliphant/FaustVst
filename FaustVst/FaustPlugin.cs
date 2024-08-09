@@ -21,7 +21,7 @@ namespace FaustVst
         double[][] outBuf = new double[2][];
 
         MonoGameHost GameHost;
-        DSPCompiler compiler = new DSPCompiler();
+        DspCompiler compiler = new DspCompiler();
 
         public FaustPlugin()
 		{
@@ -59,18 +59,11 @@ namespace FaustVst
 
             Logger.Log("FaustDSP location: " + faustAssembly.Location);
 
-            try
-            {
-                AssemblyLoadContext loadContext = AssemblyLoadContext.GetLoadContext(faustAssembly);
+            AssemblyLoadContext loadContext = AssemblyLoadContext.GetLoadContext(faustAssembly);
 
-                Logger.Log("LoadContext: " + loadContext.ToString());
+            Logger.Log("LoadContext: " + loadContext.ToString());
 
-                FaustDSP = compiler.CompileDSP(path, loadContext);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Compilation failed with: " + ex.ToString());
-            }
+            FaustDSP = compiler.CompileDSP(path, loadContext);
 
             if (FaustDSP != null)
             {

@@ -8,11 +8,10 @@ using System.Runtime.Loader;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.VisualBasic;
 
 namespace FaustDSP
 {
-    public class DSPCompiler
+    public class DspCompiler
     {
         int version = 1;
 
@@ -24,6 +23,7 @@ namespace FaustDSP
         public IFaustDSP CompileDSP(string dspPath, AssemblyLoadContext loadContext)
         {
             StringBuilder compilerOutput = new StringBuilder();
+            StringBuilder compilerError = new StringBuilder();
 
             using (Process process = new Process())
             {
@@ -32,15 +32,23 @@ namespace FaustDSP
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardInput = true;
+                process.StartInfo.RedirectStandardError = true;
                 process.StartInfo.UseShellExecute = false;
 
                 process.OutputDataReceived += (sender, args) => compilerOutput.AppendLine(args.Data);
+                process.ErrorDataReceived += (sender, args) => compilerError.AppendLine(args.Data);
 
                 if (process.Start())
                 {
                     process.BeginOutputReadLine();
-                    
+                    process.BeginErrorReadLine();
+
                     process.WaitForExit();
+
+                    if (process.ExitCode != 0)
+                    {
+                        throw new FaustCompileException("Faust compile failed: " + compilerError.ToString());
+                    }
 
                     List<MetadataReference> refs = new List<MetadataReference>();
 
@@ -90,7 +98,7 @@ namespace FaustDSP
                                     typeStr += diagnostic.ToString() + "\n";
                                 }
 
-                                throw new Exception(typeStr);
+                                throw new FaustCompileException(typeStr);
                             }
 
                             IFaustDSP dspClass = Activator.CreateInstance(dspType) as IFaustDSP;
@@ -106,13 +114,30 @@ namespace FaustDSP
                                 errStr += diag.ToString();
                             }
 
-                            throw new Exception(errStr);
+                            throw new FaustCompileException("CSharpCompilation failed: " + errStr);
                         }
                     }
                 }
             }
 
             return null;
+        }
+
+        public class FaustCompileException : Exception
+        {
+            public FaustCompileException()
+            {
+            }
+
+            public FaustCompileException(string message)
+                : base(message)
+            {
+            }
+
+            public FaustCompileException(string message, Exception inner)
+                : base(message, inner)
+            {
+            }
         }
     }
 }
