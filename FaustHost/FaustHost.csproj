@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AudioPlugSharp" Version="0.6.3" />
+		<PackageReference Include="AudioPlugSharp" Version="0.6.4" />
 		<PackageReference Include="AudioPlugSharpHost" Version="0.6.3" />
 	</ItemGroup>
 

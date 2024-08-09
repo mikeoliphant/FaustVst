@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AudioPlugSharp" Version="0.6.3" />
+		<PackageReference Include="AudioPlugSharp" Version="0.6.4" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" />
 		<PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
 		<PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.303" />
