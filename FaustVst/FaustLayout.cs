@@ -135,59 +135,84 @@ namespace FaustVst
             }
             else
             {
-                if ((element is FaustUIFloatElement) && ((element.ElementType == EFaustUIElementType.HorizontalBargraph) || (element.ElementType == EFaustUIElementType.VerticalBargraph)))
+                if (element is FaustUIVariableElement)
                 {
-                    FaustUIFloatElement floatElement = element as FaustUIFloatElement;
-
-                    VerticalStack controlVStack = new VerticalStack()
+                    if ((element.ElementType == EFaustUIElementType.Button) || (element.ElementType == EFaustUIElementType.CheckBox))
                     {
-                        HorizontalAlignment = EHorizontalAlignment.Stretch,
-                        VerticalAlignment = EVerticalAlignment.Stretch
-                    };
+                        FaustUIVariableElement variableElement = element as FaustUIVariableElement;
 
-                    controlVStack.Children.Add(new TextBlock(element.Label)
-                    {
-                        Margin = new LayoutPadding(5, 0),
-                        HorizontalAlignment = EHorizontalAlignment.Center,
-                        TextColor = foregroundColor,
-                        TextFont = Layout.Current.GetFont("SmallFont")
-                    });
-
-                    LevelBar levelBar = null;
-
-                    if (element.ElementType == EFaustUIElementType.HorizontalBargraph)
-                    {
-                        levelBar = new HorizontalLevelBar()
+                        TextButton button = new TextButton(element.Label)
                         {
-                            DesiredHeight = 40,
-                            DesiredWidth = 300,
                             HorizontalAlignment = EHorizontalAlignment.Center,
-                            VerticalAlignment = EVerticalAlignment.Center,
-                            Margin = new LayoutPadding(20),
+                            VerticalAlignment = EVerticalAlignment.Center
                         };
-                    }
-                    else
-                    {
-                        levelBar = new VerticalLevelBar()
+
+                        button.IsToggleButton = (element.ElementType == EFaustUIElementType.CheckBox);
+
+                        button.SetPressed(variableElement.VariableAccessor.GetValue() == 1.0f);
+
+                        button.PressAction = delegate
                         {
-                            DesiredHeight = 300,
-                            DesiredWidth = 40,
-                            HorizontalAlignment = EHorizontalAlignment.Center,
-                            VerticalAlignment = EVerticalAlignment.Center,
-                            Margin = new LayoutPadding(20),
+                            variableElement.VariableAccessor.SetValue(button.IsPressed ? 1.0 : 0.0);
                         };
+
+                        container.Children.Add(button);
                     }
-
-                    levelBar.GetValue = delegate
+                    else if ((element.ElementType == EFaustUIElementType.HorizontalBargraph) || (element.ElementType == EFaustUIElementType.VerticalBargraph))
                     {
-                        return floatElement.GetNormalizedValue(floatElement.VariableAccessor.GetValue());
-                    };
+                        FaustUIFloatElement floatElement = element as FaustUIFloatElement;
 
-                    controlVStack.Children.Add(levelBar);
+                        VerticalStack controlVStack = new VerticalStack()
+                        {
+                            HorizontalAlignment = EHorizontalAlignment.Stretch,
+                            VerticalAlignment = EVerticalAlignment.Stretch
+                        };
 
-                    container.Children.Add(controlVStack);
+                        controlVStack.Children.Add(new TextBlock(element.Label)
+                        {
+                            Margin = new LayoutPadding(5, 0),
+                            HorizontalAlignment = EHorizontalAlignment.Center,
+                            TextColor = foregroundColor,
+                            TextFont = Layout.Current.GetFont("SmallFont")
+                        });
+
+                        LevelBar levelBar = null;
+
+                        if (element.ElementType == EFaustUIElementType.HorizontalBargraph)
+                        {
+                            levelBar = new HorizontalLevelBar()
+                            {
+                                DesiredHeight = 40,
+                                DesiredWidth = 300,
+                                HorizontalAlignment = EHorizontalAlignment.Center,
+                                VerticalAlignment = EVerticalAlignment.Center,
+                                Margin = new LayoutPadding(20),
+                            };
+                        }
+                        else
+                        {
+                            levelBar = new VerticalLevelBar()
+                            {
+                                DesiredHeight = 300,
+                                DesiredWidth = 40,
+                                HorizontalAlignment = EHorizontalAlignment.Center,
+                                VerticalAlignment = EVerticalAlignment.Center,
+                                Margin = new LayoutPadding(20),
+                            };
+                        }
+
+                        levelBar.GetValue = delegate
+                        {
+                            return floatElement.GetNormalizedValue(floatElement.VariableAccessor.GetValue());
+                        };
+
+                        controlVStack.Children.Add(levelBar);
+
+                        container.Children.Add(controlVStack);
+                    }
                 }
-                else if (element is FaustUIWriteableFloatElement)
+                
+                if (element is FaustUIWriteableFloatElement)
                 {
                     FaustUIWriteableFloatElement floatElement = element as FaustUIWriteableFloatElement;
 
