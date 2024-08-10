@@ -232,27 +232,65 @@ namespace FaustVst
                         ValueFormat = valueFormat
                     };
 
-                    ParameterDial dial = new ParameterDial()
+                    if (element.GetMetaData("style") == "knob")
                     {
-                        MinValue = floatElement.MinValue,
-                        MaxValue = floatElement.MaxValue,
-                        DefaultValue = floatElement.DefaultValue
-                    };
+                        ParameterDial dial = new ParameterDial()
+                        {
+                            MinValue = floatElement.MinValue,
+                            MaxValue = floatElement.MaxValue,
+                            DefaultValue = floatElement.DefaultValue
+                        };
 
-                    controlDock.Children.Add(dial);
+                        controlDock.Children.Add(dial);
 
-                    dial.SetDialColor(UIColor.Black);
+                        dial.SetDialColor(UIColor.Black);
 
-                    dial.SetPointerColor(((foregroundColor.R + foregroundColor.G + foregroundColor.B) / 3) > 128 ? UIColor.Black : UIColor.White);
+                        dial.SetPointerColor(((foregroundColor.R + foregroundColor.G + foregroundColor.B) / 3) > 128 ? UIColor.Black : UIColor.White);
 
-                    dial.SetValue(floatElement.VariableAccessor.GetValue());
+                        dial.SetValue(floatElement.VariableAccessor.GetValue());
 
-                    dial.ValueChangedAction = delegate (double val)
+                        dial.ValueChangedAction = delegate (double val)
+                        {
+                            floatElement.VariableAccessor.SetValue(val);
+
+                            valueDisplay.SetValue(val);
+                        };
+                    }
+                    else if ((element.ElementType == EFaustUIElementType.HorizontalSlider) || (element.ElementType == EFaustUIElementType.VerticalSlider))
                     {
-                        floatElement.VariableAccessor.SetValue(val);
+                        Slider slider = null;
 
-                        valueDisplay.SetValue(val);
-                    };
+                        if (element.ElementType == EFaustUIElementType.HorizontalSlider)
+                        {
+                            slider = new HorizontalSlider("VerticalSlider")
+                            {
+                                HorizontalAlignment = EHorizontalAlignment.Center,
+                                DesiredWidth = 300
+                            };
+                        }
+                        else
+                        {
+                            slider = new VerticalSlider("VerticalSlider")
+                            {
+                                HorizontalAlignment = EHorizontalAlignment.Center,
+                                DesiredHeight = 300
+                            };
+                        };
+
+                        slider.InvertLevel = true;
+                        slider.ChangeAction = delegate (float value)
+                        {
+                            value = (float)floatElement.GetDenormalizedValue(value);
+
+                            floatElement.VariableAccessor.SetValue(value);
+
+                            valueDisplay.SetValue(value);
+                        };
+
+                        slider.SetLevel((float)floatElement.GetNormalizedValue(floatElement.VariableAccessor.GetValue()));
+
+                        controlDock.Children.Add(slider);
+                    }
 
                     controlDock.Children.Add(valueDisplay);
 
