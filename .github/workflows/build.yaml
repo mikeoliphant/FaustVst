@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  [workflow_dispatch, push, pull_request]
+  
+jobs:
+  build-windows:
+    name: Build Windows
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Setup MSBuild and add to PATH
+      uses: microsoft/setup-msbuild@v1.3.1
+
+    - name: Restore NuGet Packages
+      run:
+        dotnet restore
+        
+    - name: Run Image Processor
+      working-directory: ${{github.workspace}}
+      run: |
+        msbuild .\FaustVst.sln /t:FaustImageProcessor /p:Configuration="Release" 
+        FaustImageProcessor\bin\Release\net6.0-windows\FaustImageProcessor.exe
+        
+    - name: Run MSBuild for Plugin
+      working-directory: ${{github.workspace}}
+      run: msbuild .\FaustVst.sln /t:FaustVst /p:Configuration=Release
+
+    - name: Create Plugin Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: FaustVST3Plugin
+        path: ${{github.workspace}}\FaustVst\bin\Release\net6.0-windows
+        
