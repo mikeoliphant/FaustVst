@@ -42,51 +42,58 @@
           <Height>98</Height>
         </ImageManifestSheetImage>
         <ImageManifestSheetImage>
-          <ImageName>VerticalSlider</ImageName>
+          <ImageName>LevelDisplayHorizontal</ImageName>
           <XOffset>1</XOffset>
           <YOffset>949</YOffset>
+          <Width>98</Width>
+          <Height>20</Height>
+        </ImageManifestSheetImage>
+        <ImageManifestSheetImage>
+          <ImageName>VerticalSlider</ImageName>
+          <XOffset>1124</XOffset>
+          <YOffset>131</YOffset>
           <Width>48</Width>
           <Height>64</Height>
         </ImageManifestSheetImage>
         <ImageManifestSheetImage>
           <ImageName>FileOpen</ImageName>
-          <XOffset>1124</XOffset>
-          <YOffset>131</YOffset>
-          <Width>50</Width>
-          <Height>50</Height>
-        </ImageManifestSheetImage>
-        <ImageManifestSheetImage>
-          <ImageName>Reload</ImageName>
           <XOffset>1254</XOffset>
           <YOffset>1</YOffset>
           <Width>50</Width>
           <Height>50</Height>
         </ImageManifestSheetImage>
         <ImageManifestSheetImage>
-          <ImageName>PopupBackground</ImageName>
+          <ImageName>Reload</ImageName>
           <XOffset>745</XOffset>
           <YOffset>809</YOffset>
+          <Width>50</Width>
+          <Height>50</Height>
+        </ImageManifestSheetImage>
+        <ImageManifestSheetImage>
+          <ImageName>PopupBackground</ImageName>
+          <XOffset>1</XOffset>
+          <YOffset>971</YOffset>
           <Width>48</Width>
           <Height>48</Height>
         </ImageManifestSheetImage>
         <ImageManifestSheetImage>
           <ImageName>PluginBackground</ImageName>
-          <XOffset>51</XOffset>
-          <YOffset>949</YOffset>
+          <XOffset>1124</XOffset>
+          <YOffset>197</YOffset>
           <Width>48</Width>
           <Height>48</Height>
         </ImageManifestSheetImage>
         <ImageManifestSheetImage>
           <ImageName>ButtonPressed</ImageName>
-          <XOffset>1124</XOffset>
-          <YOffset>183</YOffset>
+          <XOffset>1174</XOffset>
+          <YOffset>131</YOffset>
           <Width>32</Width>
           <Height>32</Height>
         </ImageManifestSheetImage>
         <ImageManifestSheetImage>
           <ImageName>ButtonUnpressed</ImageName>
-          <XOffset>1176</XOffset>
-          <YOffset>131</YOffset>
+          <XOffset>1254</XOffset>
+          <YOffset>53</YOffset>
           <Width>32</Width>
           <Height>32</Height>
         </ImageManifestSheetImage>

@@ -199,32 +199,42 @@ namespace FaustVst
         }
     }
 
-    public class VerticalBar : Dock
+    public class LevelBar : Dock
     {
         public bool DoLogDisplay { get; set; }
         public double WarnLevel { get; set; }
         public Func<double> GetValue { get; set; }
 
+        bool isHorizontal = false;
         ImageElement activeLevelImage;
         double lastValue = 0;
         double clip = 0;
 
-        public VerticalBar()
+        public LevelBar()
+            : this(isHorizontal: false)
         {
+        }
+
+        public LevelBar(bool isHorizontal)
+        {
+            this.isHorizontal = isHorizontal;
+
             WarnLevel = 0.8f;
             BackgroundColor = UIColor.Black;
             HorizontalAlignment = EHorizontalAlignment.Stretch;
             VerticalAlignment = EVerticalAlignment.Stretch;
 
-            Children.Add(new ImageElement("LevelDisplay")
+            string imageName = isHorizontal ? "LevelDisplayHorizontal" : "LevelDisplay";
+
+            Children.Add(new ImageElement(imageName)
             {
                 Color = new UIColor(20, 20, 20),
             });
 
-            activeLevelImage = new ImageElement("LevelDisplay")
+            activeLevelImage = new ImageElement(imageName)
             {
-                HorizontalAlignment = EHorizontalAlignment.Stretch,
-                VerticalAlignment = EVerticalAlignment.Bottom,
+                HorizontalAlignment = isHorizontal ? EHorizontalAlignment.Left : EHorizontalAlignment.Stretch,
+                VerticalAlignment = isHorizontal ? EVerticalAlignment.Stretch : EVerticalAlignment.Bottom,
                 Color = UIColor.Green,
             };
             activeLevelImage.Visible = false;
@@ -261,14 +271,28 @@ namespace FaustVst
 
                 double displayValue = DoLogDisplay ? Math.Min(Math.Log10((value * 9.0) + 1.0), 1.0) : value;
 
-                int height = (int)((double)activeLevelImage.Image.Height * displayValue);
+                if (isHorizontal)
+                {
+                    int width = (int)((double)activeLevelImage.Image.Width * displayValue);
 
-                if (height > activeLevelImage.Image.Height)
-                    height = activeLevelImage.Image.Height;
+                    if (width > activeLevelImage.Image.Width)
+                        width = activeLevelImage.Image.Width;
 
-                activeLevelImage.SourceRectangle = new Rectangle(0, activeLevelImage.Image.Height - height, activeLevelImage.Image.Width, height);
-                activeLevelImage.DesiredHeight = ContentBounds.Height * (float)displayValue;
-                activeLevelImage.Visible = (displayValue > 0);
+                    activeLevelImage.SourceRectangle = new Rectangle(0, 0, width, activeLevelImage.Image.Height);
+                    activeLevelImage.DesiredWidth = ContentBounds.Width * (float)displayValue;
+                    activeLevelImage.Visible = (displayValue > 0);
+                }
+                else
+                {
+                    int height = (int)((double)activeLevelImage.Image.Height * displayValue);
+
+                    if (height > activeLevelImage.Image.Height)
+                        height = activeLevelImage.Image.Height;
+
+                    activeLevelImage.SourceRectangle = new Rectangle(0, activeLevelImage.Image.Height - height, activeLevelImage.Image.Width, height);
+                    activeLevelImage.DesiredHeight = ContentBounds.Height * (float)displayValue;
+                    activeLevelImage.Visible = (displayValue > 0);
+                }
 
                 UpdateContentLayout();
             }
@@ -282,6 +306,24 @@ namespace FaustVst
             }
 
             base.DrawContents();
+        }
+    }
+
+    public class VerticalLevelBar : LevelBar
+    {
+        public VerticalLevelBar()
+            : base(isHorizontal: false)
+        {
+
+        }
+    }
+
+    public class HorizontalLevelBar : LevelBar
+    {
+        public HorizontalLevelBar()
+            : base(isHorizontal: true)
+        {
+
         }
     }
 }

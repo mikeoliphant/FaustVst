@@ -153,20 +153,37 @@ namespace FaustVst
                         TextFont = Layout.Current.GetFont("SmallFont")
                     });
 
-                    VerticalBar levelDisplay = new VerticalBar()
+                    LevelBar levelBar = null;
+
+                    if (element.ElementType == EFaustUIElementType.HorizontalBargraph)
                     {
-                        DesiredHeight = 300,
-                        DesiredWidth = 40,
-                        HorizontalAlignment = EHorizontalAlignment.Center,
-                        VerticalAlignment = EVerticalAlignment.Center,
-                        Margin = new LayoutPadding(20, 0),
-                        GetValue = delegate
+                        levelBar = new HorizontalLevelBar()
                         {
-                            return floatElement.GetNormalizedValue(floatElement.VariableAccessor.GetValue());
-                        }
+                            DesiredHeight = 40,
+                            DesiredWidth = 300,
+                            HorizontalAlignment = EHorizontalAlignment.Center,
+                            VerticalAlignment = EVerticalAlignment.Center,
+                            Margin = new LayoutPadding(20),
+                        };
+                    }
+                    else
+                    {
+                        levelBar = new VerticalLevelBar()
+                        {
+                            DesiredHeight = 300,
+                            DesiredWidth = 40,
+                            HorizontalAlignment = EHorizontalAlignment.Center,
+                            VerticalAlignment = EVerticalAlignment.Center,
+                            Margin = new LayoutPadding(20),
+                        };
+                    }
+
+                    levelBar.GetValue = delegate
+                    {
+                        return floatElement.GetNormalizedValue(floatElement.VariableAccessor.GetValue());
                     };
 
-                    controlVStack.Children.Add(levelDisplay);
+                    controlVStack.Children.Add(levelBar);
 
                     container.Children.Add(controlVStack);
                 }
@@ -189,6 +206,13 @@ namespace FaustVst
                     });
 
                     string valueFormat = "{0:0.0}";
+
+                    string unit = element.GetMetaData("unit");
+
+                    if (!string.IsNullOrEmpty(unit))
+                    {
+                        valueFormat += unit;
+                    }
 
                     Dock controlDock = new Dock() { HorizontalAlignment = EHorizontalAlignment.Stretch, VerticalAlignment = EVerticalAlignment.Center };
                     controlVStack.Children.Add(controlDock);

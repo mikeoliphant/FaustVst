@@ -73,6 +73,18 @@ public class FaustUIElement
 {
     public EFaustUIElementType ElementType { get; set; }
     public string Label { get; set; }
+    public Dictionary<string, string> MetaData { get; set; }
+
+    public string GetMetaData(string key)
+    {
+        if (MetaData == null)
+            return null;
+
+        if (MetaData.ContainsKey(key))
+            return MetaData[key];
+
+        return null;
+    }
 }
 
 public class FaustBoxElement : FaustUIElement
@@ -141,8 +153,24 @@ public class FaustUIDefinition
 
     Stack<FaustBoxElement> boxStack = new Stack<FaustBoxElement>();
 
-    public void DeclareElementMetaData(string elemendID, string key, string value)
+    Dictionary<string, Dictionary<string, string>> uiMetaData = new Dictionary<string, Dictionary<string, string>>();
+
+    public void DeclareElementMetaData(string elementID, string key, string value)
     {
+        Dictionary<string, string> elementData;
+
+        if (uiMetaData.ContainsKey(elementID))
+        {
+            elementData = uiMetaData[elementID];
+        }
+        else
+        {
+            elementData = new Dictionary<string, string>();
+
+            uiMetaData[elementID] = elementData;
+        }
+
+        elementData[key] = value;
     }
 
     public void StartBox(FaustBoxElement box)
@@ -166,6 +194,16 @@ public class FaustUIDefinition
 
     public void AddElement(FaustUIElement element)
     {
+        if (element is FaustUIVariableElement)
+        {
+            string id = (element as FaustUIVariableElement).VariableAccessor.ID;
+
+            if (uiMetaData.ContainsKey(id))
+            {
+                element.MetaData = uiMetaData[id];
+            }
+        }
+
         boxStack.Peek().Children.Add(element);
     }
 }
