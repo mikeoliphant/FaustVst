@@ -116,11 +116,15 @@ namespace FaustVst
             {
                 NinePatchWrapper outline = new NinePatchWrapper(Layout.Current.GetImage("PluginBackground"))
                 {
-                    Margin = new LayoutPadding(20)
+                    Padding = new LayoutPadding(30)
                 };
                 container.Children.Add(outline);
 
-                VerticalStack verticalStack = new VerticalStack();
+                VerticalStack verticalStack = new VerticalStack()
+                {
+                    ChildSpacing = 10
+                };
+
                 outline.Child = verticalStack;
 
                 verticalStack.Children.Add(new TextBlock(element.Label));
@@ -297,12 +301,12 @@ namespace FaustVst
                         {
                             slider = new VerticalSlider("VerticalSlider")
                             {
+                                InvertLevel = true,
                                 HorizontalAlignment = EHorizontalAlignment.Center,
                                 DesiredHeight = 300
                             };
                         };
 
-                        slider.InvertLevel = true;
                         slider.ChangeAction = delegate (float value)
                         {
                             value = (float)floatElement.GetDenormalizedValue(value);
