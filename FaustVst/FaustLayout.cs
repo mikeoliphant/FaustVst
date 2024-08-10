@@ -55,7 +55,7 @@ namespace FaustVst
 
             RootUIElement = mainDock = new Dock()
             {
-                BackgroundColor = UIColor.White,
+                BackgroundColor = new UIColor(230, 230, 230),
                 Padding = new LayoutPadding(20)
             };
 
@@ -114,7 +114,7 @@ namespace FaustVst
         {
             if (element is FaustBoxElement)
             {
-                NinePatchWrapper outline = new NinePatchWrapper(Layout.Current.DefaultUnpressedNinePatch)
+                NinePatchWrapper outline = new NinePatchWrapper(Layout.Current.GetImage("PluginBackground"))
                 {
                     Margin = new LayoutPadding(20)
                 };
@@ -125,18 +125,20 @@ namespace FaustVst
 
                 verticalStack.Children.Add(new TextBlock(element.Label));
 
-                HorizontalStack hStack = new HorizontalStack();
-                verticalStack.Children.Add(hStack);
+                ListUIElement stack = element.ElementType == EFaustUIElementType.HorizontalBox ? new HorizontalStack() : new VerticalStack();
+                verticalStack.Children.Add(stack);
 
                 foreach (FaustUIElement child in (element as FaustBoxElement).Children)
                 {
-                    AddParameters(child, hStack);
+                    AddParameters(child, stack);
                 }
             }
             else
             {
                 if ((element is FaustUIFloatElement) && ((element.ElementType == EFaustUIElementType.HorizontalBargraph) || (element.ElementType == EFaustUIElementType.VerticalBargraph)))
                 {
+                    FaustUIFloatElement floatElement = element as FaustUIFloatElement;
+
                     VerticalStack controlVStack = new VerticalStack()
                     {
                         HorizontalAlignment = EHorizontalAlignment.Stretch,
@@ -145,26 +147,28 @@ namespace FaustVst
 
                     controlVStack.Children.Add(new TextBlock(element.Label)
                     {
+                        Margin = new LayoutPadding(5, 0),
                         HorizontalAlignment = EHorizontalAlignment.Center,
                         TextColor = foregroundColor,
                         TextFont = Layout.Current.GetFont("SmallFont")
                     });
 
-                    AudioLevelDisplay levelDisplay = new AudioLevelDisplay()
+                    VerticalBar levelDisplay = new VerticalBar()
                     {
                         DesiredHeight = 300,
                         DesiredWidth = 40,
+                        HorizontalAlignment = EHorizontalAlignment.Center,
                         VerticalAlignment = EVerticalAlignment.Center,
                         Margin = new LayoutPadding(20, 0),
                         GetValue = delegate
                         {
-                            return (element as FaustUIFloatElement).VariableAccessor.GetValue();
+                            return floatElement.GetNormalizedValue(floatElement.VariableAccessor.GetValue());
                         }
                     };
 
                     controlVStack.Children.Add(levelDisplay);
 
-                    paramStack.Children.Add(controlVStack);
+                    container.Children.Add(controlVStack);
                 }
                 else if (element is FaustUIWriteableFloatElement)
                 {
@@ -178,6 +182,7 @@ namespace FaustVst
 
                     controlVStack.Children.Add(new TextBlock(floatElement.Label)
                     {
+                        Margin = new LayoutPadding(5, 0),
                         HorizontalAlignment = EHorizontalAlignment.Center,
                         TextColor = foregroundColor,
                         TextFont = Layout.Current.GetFont("SmallFont")
@@ -202,8 +207,6 @@ namespace FaustVst
                         Margin = new LayoutPadding(-Math.Max(strWidthMin, strWidthMax), -Math.Max(strHeightMin, strHeightMax)),
                         ValueFormat = valueFormat
                     };
-
-                    controlVStack.DesiredWidth = 200;
 
                     ParameterDial dial = new ParameterDial()
                     {

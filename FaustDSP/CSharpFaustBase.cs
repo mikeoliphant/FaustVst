@@ -104,6 +104,16 @@ public class FaustUIFloatElement : FaustUIVariableElement
     public double MinValue { get; set; }
     public double MaxValue { get; set; }
 
+    public double GetNormalizedValue(double value)
+    {
+        return (value - MinValue) / (MaxValue - MinValue);
+    }
+
+    public double GetDenormalizedValue(double value)
+    {
+        return MinValue + ((MaxValue - MinValue) * value);
+    }
+
     public FaustUIFloatElement(EFaustUIElementType elementType, string label, FaustVariableAccessor variableAccessor, double minValue, double maxValue)
         : base(elementType, label, variableAccessor)
     {

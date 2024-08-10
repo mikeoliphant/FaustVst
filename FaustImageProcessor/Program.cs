@@ -39,6 +39,7 @@ namespace FaustImageProcessor
             Add("ButtonUnpressed");
 
             Add("LevelDisplay");
+            Add("LevelDisplayHorizontal");
 
             Add("VerticalSlider");
 

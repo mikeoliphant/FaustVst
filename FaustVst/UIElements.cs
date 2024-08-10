@@ -199,8 +199,9 @@ namespace FaustVst
         }
     }
 
-    public class AudioLevelDisplay : Dock
+    public class VerticalBar : Dock
     {
+        public bool DoLogDisplay { get; set; }
         public double WarnLevel { get; set; }
         public Func<double> GetValue { get; set; }
 
@@ -208,7 +209,7 @@ namespace FaustVst
         double lastValue = 0;
         double clip = 0;
 
-        public AudioLevelDisplay()
+        public VerticalBar()
         {
             WarnLevel = 0.8f;
             BackgroundColor = UIColor.Black;
@@ -258,16 +259,16 @@ namespace FaustVst
             {
                 lastValue = value;
 
-                double logLevel = Math.Min(Math.Log10((value * 9.0) + 1.0), 1.0);
+                double displayValue = DoLogDisplay ? Math.Min(Math.Log10((value * 9.0) + 1.0), 1.0) : value;
 
-                int height = (int)((double)activeLevelImage.Image.Height * logLevel);
+                int height = (int)((double)activeLevelImage.Image.Height * displayValue);
 
                 if (height > activeLevelImage.Image.Height)
                     height = activeLevelImage.Image.Height;
 
                 activeLevelImage.SourceRectangle = new Rectangle(0, activeLevelImage.Image.Height - height, activeLevelImage.Image.Width, height);
-                activeLevelImage.DesiredHeight = ContentBounds.Height * (float)logLevel;
-                activeLevelImage.Visible = (logLevel > 0);
+                activeLevelImage.DesiredHeight = ContentBounds.Height * (float)displayValue;
+                activeLevelImage.Visible = (displayValue > 0);
 
                 UpdateContentLayout();
             }

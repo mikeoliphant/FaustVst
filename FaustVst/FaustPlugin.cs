@@ -35,8 +35,8 @@ namespace FaustVst
 			PluginID = 0xA7D6AED74104A2C5;
 
 			HasUserInterface = true;
-			EditorWidth = 400;
-			EditorHeight = 200;
+			EditorWidth = 800;
+			EditorHeight = 400;
 		}
 
         public override void Initialize()
