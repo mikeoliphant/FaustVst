@@ -26,6 +26,14 @@ right_meter(x)	= attach(x, ba.linear2db(x) : vbargraph("Right [unit:dB]", -96, 1
 process = hgroup("Stereo Gain/Pan", hgroup("Gain/Pan", gain_pan) : hgroup("Output", (left_meter, right_meter)));
 ```
 
+# Installation and requirements
+
+FaustVst is currently Windows-only.
+
+FaustVst requires that you have Faust installed. It expects the Faust compiler to be located at "C:\Program Files\Faust\bin\faust.exe".
+
+To edit files, just make sure that the ".dsp" extension is assocated with your editor of choice.
+
 # Performance
 
 FaustVst is intended to provide a quick-iteration framework for working on Faust effects. While it does produce relatively well optimized code that is suitable for realtime testing, performance will be not as good as a compiled C++ effect. 
