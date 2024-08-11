@@ -52,7 +52,12 @@ jobs:
       run: msbuild .\FaustVst.sln /t:FaustVst /p:Configuration=Release
 
     - name: Add Plugin Archive
-      run: Compress-Archive -Path ${{github.workspace}}\FaustVst\bin\Release\net6.0-windows\* -Destination FaustVST3Plugin.zip
+      working-directory: ${{github.workspace}}
+      run: |
+        mkdir plugin-build
+        move FaustVst\bin\Release\net6.0-windows plugin-build\FaustVst
+        cp FaustVst\README.txt plugin-build
+        Compress-Archive -Path plugin-build\* -Destination FaustVST3Plugin.zip
 
     - name: Upload Plugin Asset
       uses: actions/upload-release-asset@v1
