@@ -1,6 +1,7 @@
 ﻿using FaustDSP;
 using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using UILayout;
@@ -59,13 +60,20 @@ namespace FaustVst
                 Padding = new LayoutPadding(20)
             };
 
+            VerticalStack vStack = new VerticalStack()
+            {
+                HorizontalAlignment = EHorizontalAlignment.Stretch,
+                VerticalAlignment = EVerticalAlignment.Stretch
+            };
+            mainDock.Children.Add(vStack);
+
             HorizontalStack pluginLoadStack = new HorizontalStack()
             {
                 HorizontalAlignment = EHorizontalAlignment.Right,
                 DesiredHeight = 80
             };
 
-            mainDock.Children.Add(pluginLoadStack);
+            vStack.Children.Add(pluginLoadStack);
 
             pluginFileText = new TextBlock()
             {
@@ -81,11 +89,24 @@ namespace FaustVst
                 ClickAction = LoadPlugin
             });
 
+            pluginLoadStack.Children.Add(new ImageButton("FileEdit")
+            {
+                VerticalAlignment = EVerticalAlignment.Stretch,
+                ClickAction = EditPlugin
+            });
+
             pluginLoadStack.Children.Add(new ImageButton("Reload")
             {
                 VerticalAlignment = EVerticalAlignment.Stretch,
                 ClickAction = ReloadPlugin
             });
+
+            UIElementWrapper wrapper = new UIElementWrapper()
+            {
+                HorizontalAlignment = EHorizontalAlignment.Stretch,
+                VerticalAlignment = EVerticalAlignment.Stretch
+            };
+            vStack.Children.Add(wrapper);
 
             paramStack = new HorizontalStack()
             {
@@ -93,7 +114,7 @@ namespace FaustVst
                 VerticalAlignment = EVerticalAlignment.Center
             };
 
-            mainDock.Children.Add(paramStack);
+            wrapper.Child = paramStack;
 
             UpdateParameters();
         }
@@ -116,12 +137,16 @@ namespace FaustVst
             {
                 NinePatchWrapper outline = new NinePatchWrapper(Layout.Current.GetImage("PluginBackground"))
                 {
+                    HorizontalAlignment = EHorizontalAlignment.Stretch,
+                    VerticalAlignment = EVerticalAlignment.Stretch,
                     Padding = new LayoutPadding(30)
                 };
                 container.Children.Add(outline);
 
                 VerticalStack verticalStack = new VerticalStack()
                 {
+                    HorizontalAlignment = EHorizontalAlignment.Stretch,
+                    VerticalAlignment = EVerticalAlignment.Stretch,
                     ChildSpacing = 10
                 };
 
@@ -129,8 +154,17 @@ namespace FaustVst
 
                 verticalStack.Children.Add(new TextBlock(element.Label));
 
+                UIElementWrapper wrapper = new UIElementWrapper()
+                {
+                    HorizontalAlignment = EHorizontalAlignment.Stretch,
+                    VerticalAlignment = EVerticalAlignment.Stretch
+                };
+                verticalStack.Children.Add(wrapper);
+
                 ListUIElement stack = element.ElementType == EFaustUIElementType.HorizontalBox ? new HorizontalStack() : new VerticalStack();
-                verticalStack.Children.Add(stack);
+                stack.HorizontalAlignment = EHorizontalAlignment.Center;
+                stack.VerticalAlignment = EVerticalAlignment.Center;
+                wrapper.Child = stack;
 
                 foreach (FaustUIElement child in (element as FaustBoxElement).Children)
                 {
@@ -335,6 +369,28 @@ namespace FaustVst
                 LoadPlugin(plugin.PluginFilePath);
             }
         }
+
+        void EditPlugin()
+        {
+            if (!string.IsNullOrEmpty(plugin.PluginFilePath))
+            {
+                try
+                {
+                    using (Process fileopener = new Process())
+                    {
+
+                        fileopener.StartInfo.FileName = "explorer";
+                        fileopener.StartInfo.Arguments = "\"" + plugin.PluginFilePath + "\"";
+                        fileopener.Start();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.ToString());
+                }
+            }
+        }
+
 
         void LoadPlugin()
         {

@@ -44,6 +44,7 @@ namespace FaustImageProcessor
             Add("VerticalSlider");
 
             AddSvg("FileOpen", 50);
+            AddSvg("FileEdit", 50);
             AddSvg("Reload", 50);
 
             PopDirectory();

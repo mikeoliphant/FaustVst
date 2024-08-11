@@ -63,37 +63,44 @@
           <Height>50</Height>
         </ImageManifestSheetImage>
         <ImageManifestSheetImage>
-          <ImageName>Reload</ImageName>
+          <ImageName>FileEdit</ImageName>
           <XOffset>745</XOffset>
           <YOffset>809</YOffset>
           <Width>50</Width>
           <Height>50</Height>
         </ImageManifestSheetImage>
         <ImageManifestSheetImage>
-          <ImageName>PopupBackground</ImageName>
+          <ImageName>Reload</ImageName>
           <XOffset>1</XOffset>
           <YOffset>971</YOffset>
-          <Width>48</Width>
-          <Height>48</Height>
+          <Width>50</Width>
+          <Height>50</Height>
         </ImageManifestSheetImage>
         <ImageManifestSheetImage>
-          <ImageName>PluginBackground</ImageName>
+          <ImageName>PopupBackground</ImageName>
           <XOffset>1124</XOffset>
           <YOffset>197</YOffset>
           <Width>48</Width>
           <Height>48</Height>
         </ImageManifestSheetImage>
         <ImageManifestSheetImage>
-          <ImageName>ButtonPressed</ImageName>
+          <ImageName>PluginBackground</ImageName>
           <XOffset>1174</XOffset>
           <YOffset>131</YOffset>
+          <Width>48</Width>
+          <Height>48</Height>
+        </ImageManifestSheetImage>
+        <ImageManifestSheetImage>
+          <ImageName>ButtonPressed</ImageName>
+          <XOffset>1254</XOffset>
+          <YOffset>53</YOffset>
           <Width>32</Width>
           <Height>32</Height>
         </ImageManifestSheetImage>
         <ImageManifestSheetImage>
           <ImageName>ButtonUnpressed</ImageName>
-          <XOffset>1254</XOffset>
-          <YOffset>53</YOffset>
+          <XOffset>1306</XOffset>
+          <YOffset>1</YOffset>
           <Width>32</Width>
           <Height>32</Height>
         </ImageManifestSheetImage>
