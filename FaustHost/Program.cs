@@ -9,9 +9,9 @@ namespace FaustHost
         [STAThread]
         static void Main(string[] args)
         {
-            FaustPlugin plugin = new FaustPlugin();
+            FaustVst.FaustVst plugin = new FaustVst.FaustVst();
 
-            WindowsFormsHost<FaustPlugin> host = new WindowsFormsHost<FaustPlugin>(plugin);
+            WindowsFormsHost<FaustVst.FaustVst> host = new WindowsFormsHost<FaustVst.FaustVst>(plugin);
 
             host.Run();
         }

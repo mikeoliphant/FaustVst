@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0-windows</TargetFramework>
+		<Version>0.1.0</Version>
 		<UseWindowsForms>true</UseWindowsForms>
 		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

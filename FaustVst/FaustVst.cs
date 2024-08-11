@@ -9,28 +9,28 @@ using UILayout;
 
 namespace FaustVst
 {
-    public class FaustPlugin : AudioPluginBase
+    public class FaustVst : AudioPluginBase
     {
         public string PluginFilePath;
 
         AudioIOPort stereoInput;
         AudioIOPort stereoOutput;
 
-        public IFaustDSP FaustDSP { get; private set; } = null;
+        public IFaustDSP FaustDsp { get; private set; } = null;
         double[][] inBuf = new double[2][];
         double[][] outBuf = new double[2][];
 
         MonoGameHost GameHost;
         DspCompiler compiler = new DspCompiler();
 
-        public FaustPlugin()
+        public FaustVst()
 		{
 			Company = "Nostatic Software";
 			Website = "github.com/mikeoliphant";
 			Contact = "contact@nostatic.org";
 			PluginName = "FaustPlugin";
 			PluginCategory = "Fx";
-			PluginVersion = "1.0.0";
+            PluginVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(this.GetType().Assembly.Location).FileVersion;
 
 			PluginID = 0xA7D6AED74104A2C5;
 
@@ -63,12 +63,12 @@ namespace FaustVst
 
             Logger.Log("LoadContext: " + loadContext.ToString());
 
-            FaustDSP = compiler.CompileDSP(path, loadContext);
+            FaustDsp = compiler.CompileDSP(path, loadContext);
 
-            if (FaustDSP != null)
+            if (FaustDsp != null)
             {
-                FaustDSP.InstanceResetUserInterface();
-                FaustDSP.Init((int)Host.SampleRate);
+                FaustDsp.InstanceResetUserInterface();
+                FaustDsp.Init((int)Host.SampleRate);
             }
             else
             {
@@ -148,9 +148,9 @@ namespace FaustVst
         {
             base.InitializeProcessing();
 
-            if (FaustDSP != null)
+            if (FaustDsp != null)
             {
-                FaustDSP.Init((int)Host.SampleRate);
+                FaustDsp.Init((int)Host.SampleRate);
             }
         }
 
@@ -171,20 +171,20 @@ namespace FaustVst
 
             Host.ProcessAllEvents();
 
-            if (FaustDSP == null)
+            if (FaustDsp == null)
             {
                 stereoInput.PassThroughTo(stereoOutput);
             }
             else
             {
-                for (int i = 0; i < FaustDSP.GetNumInputs(); i++)
+                for (int i = 0; i < FaustDsp.GetNumInputs(); i++)
                 {
                     stereoInput.GetAudioBuffer(i).CopyTo(inBuf[i]);
                 }
 
-                FaustDSP.Compute((int)Host.CurrentAudioBufferSize, inBuf, outBuf);
+                FaustDsp.Compute((int)Host.CurrentAudioBufferSize, inBuf, outBuf);
 
-                int numOutputs = FaustDSP.GetNumOutputs();
+                int numOutputs = FaustDsp.GetNumOutputs();
 
                 for (int i = 0; i < 2; i++)
                 {

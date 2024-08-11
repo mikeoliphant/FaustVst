@@ -1,5 +1,6 @@
 ﻿using FaustDSP;
 using Microsoft.Xna.Framework;
+using SharpDX.Direct3D9;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -10,13 +11,13 @@ namespace FaustVst
 {
     public class FaustLayout : MonoGameLayout
     {
-        FaustPlugin plugin;
+        FaustVst plugin;
         Dock mainDock;
         HorizontalStack paramStack;
         TextBlock pluginFileText;
         UIColor foregroundColor = UIColor.Black;
 
-        public FaustLayout(FaustPlugin plugin)
+        public FaustLayout(FaustVst plugin)
         {
             this.plugin = plugin;
         }
@@ -125,8 +126,8 @@ namespace FaustVst
 
             paramStack.Children.Clear();
 
-            if (plugin.FaustDSP != null)
-                AddParameters(plugin.FaustDSP.UIDefinition.RootElement, paramStack);
+            if (plugin.FaustDsp != null)
+                AddParameters(plugin.FaustDsp.UIDefinition.RootElement, paramStack);
 
             mainDock.UpdateContentLayout();
         }
@@ -239,10 +240,22 @@ namespace FaustVst
                             };
                         }
 
-                        levelBar.GetValue = delegate
+                        if (element.GetMetaData("unit") == "dB")
                         {
-                            return floatElement.GetNormalizedValue(floatElement.VariableAccessor.GetValue());
-                        };
+                            levelBar.GetValue = delegate
+                            {
+                                return DB2Linear(floatElement.VariableAccessor.GetValue());
+                            };
+
+                            levelBar.DoLogDisplay = true;
+                        }
+                        else
+                        {
+                            levelBar.GetValue = delegate
+                            {
+                                return floatElement.GetNormalizedValue(floatElement.VariableAccessor.GetValue());
+                            };
+                        }
 
                         controlVStack.Children.Add(levelBar);
 
@@ -360,6 +373,11 @@ namespace FaustVst
                     container.Children.Add(controlVStack);
                 }
             }
+        }
+
+        double DB2Linear(double value)
+        {
+            return Math.Pow(10.0f, value / 20.0f);
         }
 
         void ReloadPlugin()
