@@ -35,7 +35,7 @@ jobs:
         submodules: recursive
         
     - name: Setup MSBuild and add to PATH
-      uses: microsoft/setup-msbuild@v1.3.1
+      uses: microsoft/setup-msbuild@v2
 
     - name: Restore NuGet Packages
       run:
@@ -45,7 +45,8 @@ jobs:
       working-directory: ${{github.workspace}}
       run: |
         msbuild .\FaustVst.sln /restore /t:Rebuild /t:FaustImageProcessor /p:Configuration="Release" 
-        FaustImageProcessor\bin\Release\net8.0-windows\FaustImageProcessor.exe
+        cd FaustImageProcessor\bin\Release\net8.0
+        .\FaustImageProcessor.exe
         
     - name: Run MSBuild for Plugin
       working-directory: ${{github.workspace}}
