@@ -93,7 +93,7 @@ namespace FaustVst
                     break;
             }
 
-            if (IsDoubleTap(touch))
+            if (IsDoubleTap(touch, this))
             {
                 SetValue(DefaultValue);
 

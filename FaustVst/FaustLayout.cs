@@ -23,7 +23,7 @@ namespace FaustVst
             this.plugin = plugin;
         }
 
-        public override void SetHost(Game host)
+        public override void SetHost(MonoGameHost host)
         {
             base.SetHost(host);
 
