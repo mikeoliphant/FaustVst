@@ -44,7 +44,7 @@ jobs:
     - name: Run Image Processor
       working-directory: ${{github.workspace}}
       run: |
-        msbuild .\FaustVst.sln /t:FaustImageProcessor /p:Configuration="Release" 
+        msbuild .\FaustVst.sln /restore /t:Rebuild /t:FaustImageProcessor /p:Configuration="Release" 
         FaustImageProcessor\bin\Release\net6.0-windows\FaustImageProcessor.exe
         
     - name: Run MSBuild for Plugin
