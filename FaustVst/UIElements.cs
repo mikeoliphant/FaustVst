@@ -160,7 +160,7 @@ namespace FaustVst
                 this.value = value;
 
                 textBlock.StringBuilder.Clear();
-                textBlock.StringBuilder.Append(value.ToString(ValueFormat, CultureInfo.InvariantCulture));
+                textBlock.StringBuilder.AppendFormat(ValueFormat, value);
             }
 
             UpdateActive();
