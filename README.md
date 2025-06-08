@@ -28,11 +28,21 @@ process = hgroup("Stereo Gain/Pan", hgroup("Gain/Pan", gain_pan) : hgroup("Outpu
 
 # Installation and requirements
 
+You can download the VST plugin from the releases section [here](https://github.com/mikeoliphant/FaustVst/releases/latest).
+
+To install, unpack the .zip file and copy the "FaustVst" folder to your VST3 folder - usually "C:\Program Files\Common Files\VST3".
+
 FaustVst is currently Windows-only.
 
 FaustVst requires that you have Faust installed. It expects the Faust compiler to be located at "C:\Program Files\Faust\bin\faust.exe".
 
 To edit files, just make sure that the ".dsp" extension is assocated with your editor of choice.
+
+# Current limitations
+
+- Maximum of 2 input/output audio channels.
+- No MIDI support (yet).
+- Not all UI metadata is supported.
 
 # Performance
 
