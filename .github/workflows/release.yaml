@@ -45,7 +45,7 @@ jobs:
       working-directory: ${{github.workspace}}
       run: |
         msbuild .\FaustVst.sln /restore /t:Rebuild /t:FaustImageProcessor /p:Configuration="Release" 
-        FaustImageProcessor\bin\Release\net6.0-windows\FaustImageProcessor.exe
+        FaustImageProcessor\bin\Release\net8.0-windows\FaustImageProcessor.exe
         
     - name: Run MSBuild for Plugin
       working-directory: ${{github.workspace}}
@@ -55,7 +55,7 @@ jobs:
       working-directory: ${{github.workspace}}
       run: |
         mkdir plugin-build
-        move FaustVst\bin\Release\net6.0-windows plugin-build\FaustVst
+        move FaustVst\bin\Release\net8.0-windows plugin-build\FaustVst
         cp FaustVst\README.txt plugin-build
         Compress-Archive -Path plugin-build\* -Destination FaustVST3Plugin.zip
 
