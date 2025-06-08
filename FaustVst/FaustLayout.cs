@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using SharpDX.Direct3D9;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using UILayout;
@@ -281,7 +282,9 @@ namespace FaustVst
                         TextFont = Layout.Current.GetFont("SmallFont")
                     });
 
-                    string valueFormat = "{0:0.0}";
+                    int decimals = GetDecimalPlaces((Decimal)(element as FaustUIWriteableFloatElement).Step);
+
+                    string valueFormat = "F" + decimals;
 
                     string unit = element.GetMetaData("unit");
 
@@ -295,10 +298,10 @@ namespace FaustVst
 
                     float strWidthMax;
                     float strHeightMax;
-                    Layout.Current.GetFont("SmallFont").MeasureString(String.Format(valueFormat, floatElement.MaxValue), out strWidthMax, out strHeightMax);
+                    Layout.Current.GetFont("SmallFont").MeasureString(floatElement.MaxValue.ToString(valueFormat, CultureInfo.InvariantCulture), out strWidthMax, out strHeightMax);
                     float strWidthMin;
                     float strHeightMin;
-                    Layout.Current.GetFont("SmallFont").MeasureString(String.Format(valueFormat, floatElement.MinValue), out strWidthMin, out strHeightMin);
+                    Layout.Current.GetFont("SmallFont").MeasureString(floatElement.MinValue.ToString(valueFormat, CultureInfo.InvariantCulture), out strWidthMin, out strHeightMin);
 
                     ParameterValueDisplay valueDisplay = new ParameterValueDisplay()
                     {
@@ -444,6 +447,20 @@ namespace FaustVst
             }
 
             UpdateParameters();
+        }
+
+        public static int GetDecimalPlaces(decimal n)
+        {
+            n = Math.Abs(n); //make sure it is positive.
+            n -= (int)n;     //remove the integer part of the number.
+            var decimalPlaces = 0;
+            while (n > 0)
+            {
+                decimalPlaces++;
+                n *= 10;
+                n -= (int)n;
+            }
+            return decimalPlaces;
         }
     }
 }

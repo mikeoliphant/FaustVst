@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Drawing;
+using System.Globalization;
 using UILayout;
 
 namespace FaustVst
@@ -159,7 +160,7 @@ namespace FaustVst
                 this.value = value;
 
                 textBlock.StringBuilder.Clear();
-                textBlock.StringBuilder.AppendFormat(ValueFormat, value);
+                textBlock.StringBuilder.Append(value.ToString(ValueFormat, CultureInfo.InvariantCulture));
             }
 
             UpdateActive();

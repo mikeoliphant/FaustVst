@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 		<Version>0.1.0</Version>
 		<UseWindowsForms>true</UseWindowsForms>
 		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
@@ -10,10 +10,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AudioPlugSharp" Version="0.6.4" />
+		<PackageReference Include="AudioPlugSharp" Version="0.6.10" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" />
-		<PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
-		<PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.303" />
 	</ItemGroup>
 
 	<ItemGroup>

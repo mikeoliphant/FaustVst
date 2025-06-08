@@ -120,6 +120,7 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dependencies\UILayout\UILayout.MonoGame\UILayout.MonoGame.projitems*{03b294af-a2cc-4625-93d4-1dfaf2a7d116}*SharedItemsImports = 5
+		Dependencies\UILayout\UILayout.WindowsNative\UILayout.WindowsNative.projitems*{03b294af-a2cc-4625-93d4-1dfaf2a7d116}*SharedItemsImports = 5
 		Dependencies\UILayout\UILayout\UILayout.projitems*{03b294af-a2cc-4625-93d4-1dfaf2a7d116}*SharedItemsImports = 5
 		Dependencies\UILayout\UILayout.MonoGame\UILayout.MonoGame.projitems*{fe3bf348-e94d-418a-93fb-96794a9c7ca5}*SharedItemsImports = 5
 		Dependencies\UILayout\UILayout\UILayout.projitems*{fe3bf348-e94d-418a-93fb-96794a9c7ca5}*SharedItemsImports = 5

@@ -13,8 +13,8 @@ namespace FaustVst
     {
         public string PluginFilePath;
 
-        AudioIOPort stereoInput;
-        AudioIOPort stereoOutput;
+        DoubleAudioIOPort stereoInput;
+        DoubleAudioIOPort stereoOutput;
 
         public IFaustDSP FaustDsp { get; private set; } = null;
         double[][] inBuf = new double[2][];
@@ -25,7 +25,7 @@ namespace FaustVst
 
         public FaustVst()
 		{
-			Company = "Nostatic Software";
+			Company = "Mike Oliphant";
 			Website = "github.com/mikeoliphant";
 			Contact = "contact@nostatic.org";
 			PluginName = "FaustPlugin";
@@ -45,8 +45,8 @@ namespace FaustVst
 
             //Logger.Log("Plugin has " + plugin.GetNumInputs() + " inputs and " + plugin.GetNumOutputs() + " outputs");
 
-            InputPorts = new AudioIOPort[] { stereoInput = new AudioIOPort("Stereo Input", EAudioChannelConfiguration.Stereo) };
-            OutputPorts = new AudioIOPort[] { stereoOutput = new AudioIOPort("Stereo Output", EAudioChannelConfiguration.Stereo) };
+            InputPorts = new AudioIOPort[] { stereoInput = new DoubleAudioIOPort("Stereo Input", EAudioChannelConfiguration.Stereo) };
+            OutputPorts = new AudioIOPort[] { stereoOutput = new DoubleAudioIOPort("Stereo Output", EAudioChannelConfiguration.Stereo) };
         }
 
         public void LoadPlugin(string path)
