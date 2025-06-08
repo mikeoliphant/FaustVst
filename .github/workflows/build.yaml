@@ -23,7 +23,7 @@ jobs:
       working-directory: ${{github.workspace}}
       run: |
         msbuild .\FaustVst.sln /restore /t:Rebuild /t:FaustImageProcessor /p:Configuration="Release" 
-        FaustImageProcessor\bin\Release\net6.0-windows\FaustImageProcessor.exe
+        FaustImageProcessor\bin\Release\net8.0-windows\FaustImageProcessor.exe
         
     - name: Run MSBuild for Plugin
       working-directory: ${{github.workspace}}
@@ -33,5 +33,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: FaustVST3Plugin
-        path: ${{github.workspace}}\FaustVst\bin\Release\net6.0-windows
+        path: ${{github.workspace}}\FaustVst\bin\Release\net8.0-windows
         
